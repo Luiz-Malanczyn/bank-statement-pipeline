@@ -18,6 +18,7 @@ imapclient = "^3.0.1"
 prefect = "^3.3.3"
 loguru = "^0.7.3"
 msal = "^1.32.0"
+google-auth-httplib2 = "^0.2.0"
 
 
 [build-system]
