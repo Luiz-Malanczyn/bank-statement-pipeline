@@ -1,0 +1,32 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyd
+*.pdb
+*.egg-info/
+*.eggs/
+*.env
+*.venv
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# Configuração do Poetry
+poetry.lock
+
+# Arquivos de configuração sensíveis
+secret/
+config/config.yaml
+
+# Cache
+*.cache
+*.token
+token_cache.json
+
+# Outros
+.DS_Store
