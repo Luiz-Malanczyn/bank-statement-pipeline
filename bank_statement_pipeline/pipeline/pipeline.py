@@ -1,6 +1,5 @@
-from bank_statement_pipeline.connection.gmail_connection import GmailConnector
+from bank_statement_pipeline.pipeline.extract.gmail_extractor import GmailExtractor
 
 if __name__ == '__main__':
-    connector = GmailConnector()
-    service = connector.authenticate()
-    print(service.users().messages().list(userId="me").execute())
+    extractor = GmailExtractor()
+    arquivos_salvos = extractor.download_pdf_attachments()

@@ -27,6 +27,10 @@ config/config.yaml
 *.cache
 *.token
 token_cache.json
+token.pickle
+
+#Dados locais
+data/
 
 # Outros
 .DS_Store
