@@ -4,14 +4,17 @@ from pathlib import Path
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 from bank_statement_pipeline.script.load_config import load_config
 from bank_statement_pipeline.util.logger import logger
-from googleapiclient.discovery import build
 
+# Escopos combinados: Gmail + Google Sheets
+SCOPES = [
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/spreadsheets"
+]
 
-SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
-
-class GmailConnector:
+class GoogleConnector:
     def __init__(self):
         config_loader = load_config()
         self.client_id = config_loader.get_secret("gmail", "client_id")
@@ -28,7 +31,7 @@ class GmailConnector:
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 self.creds.refresh(Request())
-                logger.info("Token do Gmail foi renovado.")
+                logger.info("Token do Google foi renovado.")
             else:
                 flow = InstalledAppFlow.from_client_config(
                     {
@@ -47,5 +50,14 @@ class GmailConnector:
             with open(self.token_path, "wb") as token:
                 pickle.dump(self.creds, token)
                 logger.info("Token salvo no arquivo pickle.")
-        
-        return build("gmail", "v1", credentials=self.creds)
+    
+    def get_service(self, service_name: str, version: str):
+        if not self.creds:
+            self.authenticate()
+        return build(service_name, version, credentials=self.creds)
+    
+    def get_gmail_service(self):
+        return self.get_service("gmail", "v1")
+    
+    def get_sheets_service(self):
+        return self.get_service("sheets", "v4")

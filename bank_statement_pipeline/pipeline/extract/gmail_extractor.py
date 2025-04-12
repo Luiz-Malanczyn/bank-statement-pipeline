@@ -1,7 +1,7 @@
 import base64
 import os
 from pathlib import Path
-from bank_statement_pipeline.connection.gmail_connector import GmailConnector
+from bank_statement_pipeline.connection.google_connector import GoogleConnector
 from bank_statement_pipeline.util.logger import logger
 
 
@@ -10,7 +10,8 @@ class GmailExtractor:
         self.label_name = label_name
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.service = GmailConnector().authenticate()
+        self.service = GoogleConnector().get_gmail_service()
+
 
     def get_label_id(self):
         results = self.service.users().labels().list(userId="me").execute()

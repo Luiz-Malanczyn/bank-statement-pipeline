@@ -1,8 +1,9 @@
 import pandas as pd
 import pdfplumber
-from pathlib import Path
 import logging
 import re
+from pathlib import Path
+from bank_statement_pipeline.util.logger import logger
 
 logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
