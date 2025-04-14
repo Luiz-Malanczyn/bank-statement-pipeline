@@ -15,7 +15,7 @@ class IConfigLoader(ABC):
 
 class YAMLConfigLoader(IConfigLoader):
     def __init__(self, config_path=None):
-        root_dir = Path(__file__).resolve().parents[2]  # <- raiz do projeto
+        root_dir = Path(__file__).resolve().parents[2]
         self.config_path = config_path or root_dir / "config" / "config.yaml"
         self.config = self._load_yaml(self.config_path)
         secret_path = self.config.get("secret_path", str(root_dir / "secret" / "secret.yaml"))

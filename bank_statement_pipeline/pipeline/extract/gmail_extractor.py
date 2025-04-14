@@ -6,7 +6,7 @@ from bank_statement_pipeline.util.logger import logger
 
 
 class GmailExtractor:
-    def __init__(self, label_name="faturas", output_dir="data/bronze/gmail_attachments"):
+    def __init__(self, label_name="faturas", output_dir="data/bronze"):
         self.label_name = label_name
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
