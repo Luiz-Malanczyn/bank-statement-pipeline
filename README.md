@@ -1,56 +1,60 @@
 # Bank Statement Pipeline
 
-An automated pipeline to extract bank statements from Gmail, process PDF files, and load transaction data into Google Sheets.
+An automated ETL pipeline that extracts bank statements from Gmail, processes PDF files, and loads transaction data into Google Sheets.
 
-## Overview
+## 🌟 Features
 
-This project automates the following workflow:
-1. Downloads PDF bank statements from Gmail using labels
-2. Extracts transaction data from PDF files
-3. Transforms the data into a structured format
-4. Loads the data into Google Sheets
+- Automated Gmail PDF attachment extraction using labels
+- Intelligent PDF parsing with table detection
+- Google Sheets integration for data storage
+- Configurable pipeline components
+- Colorized logging with detailed output
+- Error handling and retry mechanisms
+- Built with modern Python practices using Poetry
 
-## Requirements
+## 🛠️ Requirements
 
-- Python 3.12+
+- Python 3.12 or higher
 - Poetry for dependency management
-- Google Account with Gmail and Google Sheets access
-- Required Python packages (installed via Poetry):
+- Google Account with:
+  - Gmail API access
+  - Google Sheets API access
+- Required Python packages (managed by Poetry):
   - pandas
-  - beautifulsoup4
-  - google-api-python-client
   - pdfplumber
+  - google-api-python-client
+  - prefect
   - loguru
-  - and more (see pyproject.toml)
+  - beautifulsoup4
+  - and more (see `pyproject.toml`)
 
-## Setup
+## 📦 Installation
 
-1. Clone the repository
+1. Clone the repository:
+```sh
+git clone https://github.com/Luiz-Malanczyn/bank-statement-pipeline
+cd bank-statement-pipeline
+```
+
 2. Install dependencies using Poetry:
 ```sh
 poetry install
 ```
 
-3. Create configuration files:
-   - Create `config/config.yaml` for general configuration
-   - Create `secret/secret.yaml` for sensitive data
+## ⚙️ Configuration
 
-4. Set up Google OAuth 2.0 credentials:
-   - Create a project in Google Cloud Console
-   - Enable Gmail and Google Sheets APIs
-   - Create OAuth 2.0 credentials
-   - Add credentials to your secret.yaml file
+### 1. Create Configuration Files
 
-## Configuration
+Create two configuration files in your project:
 
-### config.yaml structure
+1. `config/config.yaml`:
 ```yaml
 google_sheet:
   spreadsheet_id: your_spreadsheet_id
   sheet_name: your_sheet_name
 ```
 
-### secret.yaml structure
+2. `secret/secret.yaml`:
 ```yaml
 gmail:
   client_id: your_client_id
@@ -58,39 +62,62 @@ gmail:
   token_path: secret/token.pickle
 ```
 
-## Usage
+### 2. Google Cloud Setup
 
-Run the main pipeline script:
+1. Create a project in Google Cloud Console
+2. Enable required APIs:
+   - Gmail API
+   - Google Sheets API
+3. Create OAuth 2.0 credentials:
+   - Create a new OAuth 2.0 Client ID
+   - Download client credentials
+   - Add credentials to `secret.yaml`
 
-```sh
-python -m bank_statement_pipeline.pipeline.pipeline
-```
-
-## Project Structure
+## 📂 Project Structure
 
 ```
 bank_statement_pipeline/
-├── connection/           # API connections
-├── pipeline/            # Main pipeline components
-│   ├── extract/        # Data extraction from Gmail
-│   ├── transform/      # PDF processing
+├── connection/           # API connection handlers
+│   └── google_connector.py
+├── pipeline/            # Core pipeline components
+│   ├── extract/        # Gmail data extraction
+│   ├── transform/      # PDF processing logic
 │   └── load/           # Google Sheets integration
-├── script/             # Configuration and utilities
+├── script/             # Configuration utilities
+│   └── load_config.py
 └── util/               # Shared utilities
+    └── logger.py
 ```
 
-## Features
+## 🚀 Usage
 
-- Gmail integration for automatic PDF download
-- PDF parsing with table extraction
-- Google Sheets data loading
-- Configurable pipeline components
-- Logging with colored output
-- Error handling and retries
+Run the pipeline using either:
 
-## Dependencies
+```sh
+# Using Python module
+python -m bank_statement_pipeline.pipeline.pipeline
 
-This project uses several key libraries:
-- [`GoogleConnector`](bank_statement_pipeline/connection/google_connector.py) for Gmail and Google Sheets API integration
-- [`PDFToDataFrame`](bank_statement_pipeline/pipeline/transform/pdf_to_dataframe.py) for PDF processing
-- [`GoogleSheetsWriter`](bank_statement_pipeline/pipeline/load/google_sheets_writer.py) for data loading
+# Or using the main script
+python main.py
+```
+
+## 🔄 Pipeline Flow
+
+1. **Extract**: Downloads PDF bank statements from Gmail using specified labels
+2. **Transform**: Processes PDF files to extract transaction data
+3. **Load**: Writes processed data to Google Sheets
+
+## 🔒 Security
+
+- Sensitive credentials are stored in `secret.yaml` (gitignored)
+- OAuth2 tokens are securely managed
+- Uses environment-based configuration
+
+## 🐳 Docker Support
+
+Build and run using Docker:
+
+```sh
+docker build -t bank-statement-pipeline .
+docker run -v $(pwd)/config:/app/config -v $(pwd)/secret:/app/secret bank-statement-pipeline
+```
