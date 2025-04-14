@@ -1,0 +1,6 @@
+# .dockerignore
+secret/
+*.pickle
+*.json
+*.yaml
+.env

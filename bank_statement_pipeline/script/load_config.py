@@ -24,11 +24,11 @@ class YAMLConfigLoader(IConfigLoader):
     def _load_yaml(self, path):
         try:
             with open(path, "r", encoding="utf-8") as f:
-                logger.info(f"Arquivo carregado com sucesso: {path}")
+                logger.info(f"File loaded with success: {path}")
                 response = yaml.safe_load(f) or {}
                 return response
         except FileNotFoundError:
-            logger.info(f"⚠️ Arquivo não encontrado: {path}")
+            logger.info(f"⚠️ File not found: {path}")
             return {}
 
     def get_config(self, section: str, key: str, default=None):
@@ -42,7 +42,7 @@ class ConfigLoaderFactory:
     def create_loader(loader_type="yaml"):
         if loader_type == "yaml":
             return YAMLConfigLoader()
-        raise ValueError(f"Loader {loader_type} não suportado.")
+        raise ValueError(f"Loader {loader_type} not supported.")
     
 def load_config():
     loader = ConfigLoaderFactory.create_loader()

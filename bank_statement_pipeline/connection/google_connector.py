@@ -8,7 +8,6 @@ from googleapiclient.discovery import build
 from bank_statement_pipeline.script.load_config import load_config
 from bank_statement_pipeline.util.logger import logger
 
-# Escopos combinados: Gmail + Google Sheets
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/spreadsheets"
@@ -26,12 +25,12 @@ class GoogleConnector:
         if self.token_path.exists():
             with open(self.token_path, "rb") as token:
                 self.creds = pickle.load(token)
-                logger.info("Token carregado do arquivo pickle.")
+                logger.info("Loading token from pickle file.")
 
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 self.creds.refresh(Request())
-                logger.info("Token do Google foi renovado.")
+                logger.info("Google token renewed.")
             else:
                 flow = InstalledAppFlow.from_client_config(
                     {
@@ -45,11 +44,11 @@ class GoogleConnector:
                     SCOPES
                 )
                 self.creds = flow.run_local_server(port=0)
-                logger.info("Nova autenticação realizada com sucesso.")
+                logger.info("New authentication token generated with success.")
 
             with open(self.token_path, "wb") as token:
                 pickle.dump(self.creds, token)
-                logger.info("Token salvo no arquivo pickle.")
+                logger.info("Token saved in the pickle file.")
     
     def get_service(self, service_name: str, version: str):
         if not self.creds:
